@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="ProdukKita: katalog produk dengan keranjang, checkout, dan voucher diskon.">
+  <title>ProdukKita | Katalog, Keranjang &amp; Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+<nav class="topbar" aria-label="Navigasi utama">
+  <div class="container topbar-inner">
+    <a class="brand" href="#/">ProdukKita<span>.</span></a>
+    <div class="topbar-actions">
+      <a class="nav-link" href="#/">Katalog</a>
+      <a class="nav-link" href="#/pesanan">Pesanan</a>
+      <button class="btn btn-primary cart-btn" id="open-cart" type="button" aria-haspopup="dialog">
+        Keranjang <span class="badge" id="cart-badge" aria-label="0 item">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content" class="container" tabindex="-1">
+
+  <!-- ===== KATALOG ===== -->
+  <section id="view-catalog" data-view="catalog">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1 tabindex="-1">Jajan apa hari ini?</h1>
+        <p>Kopi susu dingin, burger, kue, dan kentang goreng. Pilih, checkout, tinggal tunggu.</p>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="#menu">Lihat menu</a>
+          <button class="btn btn-light" type="button" id="btn-add-product">+ Tambah produk</button>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="tile t1">☕</span><span class="tile t2">🍔</span><span class="tile t3">🍰</span><span class="tile t4">🍟</span>
+        <span class="sticker">Kode <b>HEMAT10</b><br>diskon 10%</span>
+      </div>
+    </div>
+
+    <div class="ticker" role="note" aria-label="Voucher tersedia: HEMAT10 diskon 10 persen, DISKON5K potongan 5 ribu, ONGKIRGRATIS subsidi ongkir, PRODUKKITA20 diskon 20 persen">
+      <div class="ticker-track" aria-hidden="true">
+        <span>HEMAT10 · diskon 10%</span><span>DISKON5K · potongan Rp5.000</span><span>ONGKIRGRATIS · subsidi ongkir</span><span>PRODUKKITA20 · diskon 20%</span>
+        <span>HEMAT10 · diskon 10%</span><span>DISKON5K · potongan Rp5.000</span><span>ONGKIRGRATIS · subsidi ongkir</span><span>PRODUKKITA20 · diskon 20%</span>
+      </div>
+    </div>
+
+    <form class="filter-bar" role="search" id="filter-form">
+      <div><label for="q">Cari nama atau kategori produk</label>
+        <input class="control" id="q" type="search" maxlength="100" placeholder="Contoh: kopi atau minuman"></div>
+      <div><label for="kategori">Filter berdasarkan kategori</label>
+        <select class="control" id="kategori"><option value="">Semua kategori</option></select></div>
+      <button class="btn btn-light" type="button" id="filter-reset">Reset</button>
+    </form>
+
+    <h2 class="section-title" id="menu">Menu hari ini <span class="count-pill" id="count-pill">0</span></h2>
+    <div id="product-grid" class="grid"></div>
+  </section>
+
+  <!-- ===== CHECKOUT ===== -->
+  <section id="view-checkout" data-view="checkout" hidden>
+    <header class="page-heading">
+      <div>
+        <h1 tabindex="-1">Selesaikan Pesanan</h1>
+        <p class="muted">Isi data pengiriman, pilih pembayaran, dan gunakan voucher jika ada.</p>
+      </div>
+      <a class="btn btn-light" href="#/">← Lanjut belanja</a>
+    </header>
+
+    <div id="checkout-empty" class="empty-state" hidden>
+      <h2>Keranjang masih kosong</h2>
+      <p class="muted">Pilih produk dulu sebelum checkout.</p>
+      <a class="btn btn-primary" href="#/">Lihat katalog</a>
+    </div>
+
+    <div class="checkout-layout" id="checkout-layout">
+      <form id="checkout-form" class="panel" novalidate aria-describedby="co-help">
+        <div id="co-errors" class="alert alert-danger" role="alert" tabindex="-1" hidden></div>
+        <p id="co-help" class="muted">Kolom bertanda <span class="req" aria-hidden="true">*</span> wajib diisi.</p>
+
+        <fieldset>
+          <legend>Data penerima</legend>
+          <div class="field"><label for="co-nama">Nama lengkap <span class="req" aria-hidden="true">*</span></label>
+            <input class="control" id="co-nama" name="nama" autocomplete="name" maxlength="80" required aria-describedby="co-nama-err">
+            <p class="field-error" id="co-nama-err" hidden></p></div>
+          <div class="row2">
+            <div class="field"><label for="co-hp">No. WhatsApp <span class="req" aria-hidden="true">*</span></label>
+              <input class="control" id="co-hp" name="hp" type="tel" inputmode="tel" autocomplete="tel" placeholder="08123456789" required aria-describedby="co-hp-help co-hp-err">
+              <p class="hint" id="co-hp-help">Format: 08xxxxxxxxxx atau +628xxxxxxxxxx.</p>
+              <p class="field-error" id="co-hp-err" hidden></p></div>
+            <div class="field"><label for="co-email">Email (opsional)</label>
+              <input class="control" id="co-email" name="email" type="email" autocomplete="email" aria-describedby="co-email-err">
+              <p class="field-error" id="co-email-err" hidden></p></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Pengiriman</legend>
+          <div class="choices" id="ship-choices"></div>
+          <div class="field" id="address-field"><label for="co-alamat">Alamat lengkap <span class="req" aria-hidden="true">*</span></label>
+            <textarea class="control" id="co-alamat" name="alamat" rows="3" maxlength="300" autocomplete="street-address" aria-describedby="co-alamat-err" placeholder="Jalan, nomor, kelurahan, kota, kode pos"></textarea>
+            <p class="field-error" id="co-alamat-err" hidden></p></div>
+          <div class="field"><label for="co-catatan">Catatan untuk penjual (opsional)</label>
+            <input class="control" id="co-catatan" name="catatan" maxlength="150" placeholder="Contoh: tanpa es, kurangi gula"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Metode pembayaran</legend>
+          <div class="choices" id="pay-choices"></div>
+        </fieldset>
+
+        <button class="btn btn-primary btn-lg" type="submit" id="btn-place">Buat Pesanan</button>
+      </form>
+
+      <aside class="panel summary" aria-labelledby="sum-title">
+        <h2 id="sum-title">Ringkasan pesanan</h2>
+        <ul class="sum-items" id="sum-items"></ul>
+
+        <div class="voucher-box">
+          <label for="voucher-input">Kode voucher</label>
+          <div class="voucher-row">
+            <input class="control" id="voucher-input" maxlength="30" autocomplete="off" autocapitalize="characters" placeholder="Masukkan kode" aria-describedby="voucher-msg">
+            <button class="btn btn-outline" type="button" id="voucher-apply">Pakai</button>
+          </div>
+          <p id="voucher-msg" class="voucher-msg" role="status" aria-live="polite"></p>
+          <div id="voucher-list" class="voucher-list"></div>
+        </div>
+
+        <dl class="totals" id="totals"></dl>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== SUKSES ===== -->
+  <section id="view-success" data-view="success" hidden>
+    <div class="panel receipt-wrap" id="success-box"></div>
+  </section>
+
+  <!-- ===== RIWAYAT PESANAN ===== -->
+  <section id="view-orders" data-view="orders" hidden>
+    <header class="page-heading">
+      <div>
+        <h1 tabindex="-1">Pesanan Saya</h1>
+        <p class="muted">Pesanan tersimpan di browser ini.</p>
+      </div>
+    </header>
+    <div id="orders-list"></div>
+  </section>
+
+  <footer class="footer-note">
+    ProdukKita · HTML, CSS &amp; JavaScript (data disimpan di browser). Ini aplikasi demo: pembayaran tidak benar-benar diproses.
+    <button class="link-btn" type="button" id="reset-demo">Reset data demo</button>
+  </footer>
+</main>
+
+<!-- ===== DRAWER KERANJANG ===== -->
+<dialog id="cart-dialog" class="drawer" aria-labelledby="cart-title">
+  <div class="drawer-head">
+    <h2 id="cart-title">Keranjang</h2>
+    <button class="btn btn-light btn-sm" type="button" data-close="cart-dialog" aria-label="Tutup keranjang">Tutup ✕</button>
+  </div>
+  <div class="drawer-body" id="cart-body"></div>
+  <div class="drawer-foot" id="cart-foot"></div>
+</dialog>
+
+<!-- ===== DIALOG FORM PRODUK ===== -->
+<dialog id="product-dialog" class="modal" aria-labelledby="pf-title">
+  <form id="product-form" novalidate>
+    <div class="drawer-head">
+      <div><h2 id="pf-title">Tambah Produk</h2></div>
+      <button class="btn btn-light btn-sm" type="button" data-close="product-dialog" aria-label="Tutup form">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="pf-errors" class="alert alert-danger" role="alert" tabindex="-1" hidden></div>
+      <input type="hidden" id="pf-id">
+      <div class="row2">
+        <div class="field"><label for="pf-nama">Nama produk <span class="req" aria-hidden="true">*</span></label>
+          <input class="control" id="pf-nama" maxlength="120" required placeholder="Contoh: Es Kopi Susu">
+          <p class="hint">Maksimal 120 karakter.</p></div>
+        <div class="field"><label for="pf-kategori">Kategori <span class="req" aria-hidden="true">*</span></label>
+          <select class="control" id="pf-kategori" required></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="pf-harga">Harga (Rupiah) <span class="req" aria-hidden="true">*</span></label>
+          <input class="control" id="pf-harga" type="number" min="0" max="2147483647" step="1" required placeholder="15000">
+          <p class="hint">Angka tanpa titik atau simbol Rp.</p></div>
+        <div class="field"><label for="pf-stok">Stok <span class="req" aria-hidden="true">*</span></label>
+          <input class="control" id="pf-stok" type="number" min="0" max="100000000" step="1" required placeholder="10">
+          <p class="hint">Gunakan 0 jika habis.</p></div>
+      </div>
+      <div class="field"><label for="pf-gambar">URL gambar <span class="req" aria-hidden="true">*</span></label>
+        <input class="control" id="pf-gambar" type="url" maxlength="500" required placeholder="https://images.unsplash.com/...">
+        <p class="hint">Alamat HTTPS gambar dari images.unsplash.com.</p></div>
+    </div>
+    <div class="drawer-foot row-end">
+      <button class="btn btn-light" type="button" data-close="product-dialog">Batal</button>
+      <button class="btn btn-primary" type="submit" id="pf-submit">Simpan Produk</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
